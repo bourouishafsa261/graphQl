@@ -10,11 +10,13 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idA;
+    private int idAuthor;
 
     private String name;
     private int age;
     private String nationality;
 
-   
+
+    @OneToMany(mappedBy="author")
+    private List<Book> books;
 }
