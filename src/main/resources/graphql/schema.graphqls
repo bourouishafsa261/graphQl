@@ -18,7 +18,27 @@ type Book {
   title: String
   publicationYear: Int
   language: String
-  nbPages: Int
+  bPages: Int
   category: Category
   author: Author
+}
+
+type PageInfo {
+  totalItems: Int
+  itemsLeft: Int
+  hasMore: Boolean
+  pageNumber: Int
+  pageSize: Int
+}
+
+type BookPage {
+  list: [Book]
+  pageInfo: PageInfo
+}
+
+type Query {
+  books(
+    page: Int = 0,
+    size: Int = 10
+  ): BookPage
 }
