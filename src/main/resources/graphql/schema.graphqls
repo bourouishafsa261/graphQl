@@ -45,4 +45,6 @@ type Query {
     idCategory: ID,
     recursive: Boolean = false
   ): BookPage
+  
+  booksByAuthor(idAuthor: ID!): [Book]
 }

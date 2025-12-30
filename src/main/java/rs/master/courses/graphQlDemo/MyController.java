@@ -75,6 +75,14 @@ public class MyController {
 
         return new BookPage(pageList, makePageInfo(p, s, total));
     }
+    
+ // Books of selected author
+    @QueryMapping
+    public List<Book> booksByAuthor(@Argument int idAuthor){
+        return brp.findAll().stream()
+            .filter(b -> b.getAuthor()!=null && b.getAuthor().getIdAuthor()==idAuthor)
+            .toList();
+    }
 }
 
 
