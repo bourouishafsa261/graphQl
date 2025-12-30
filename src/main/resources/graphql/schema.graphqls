@@ -46,5 +46,5 @@ type Query {
     recursive: Boolean = false
   ): BookPage
   
-  booksByAuthor(idAuthor: ID!): [Book]
+   booksByAuthor(nameOrId: String = ""): [Book]
 }

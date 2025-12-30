@@ -76,12 +76,22 @@ public class MyController {
         return new BookPage(pageList, makePageInfo(p, s, total));
     }
     
- // Books of selected author
+ // Books of selected author by ID or name
     @QueryMapping
-    public List<Book> booksByAuthor(@Argument int idAuthor){
+    public List<Book> booksByAuthor(@Argument String nameOrId) {
+
+        if (nameOrId.matches("\\d+")) {  // If it's all digits, treat as ID
+            int id = Integer.parseInt(nameOrId);
+            return brp.findAll().stream()
+                    .filter(b -> b.getAuthor() != null && b.getAuthor().getIdAuthor() == id)
+                    .toList();
+        }
+
+        // Otherwise, treat as name 
+        String lowerName = nameOrId.toLowerCase();
         return brp.findAll().stream()
-            .filter(b -> b.getAuthor()!=null && b.getAuthor().getIdAuthor()==idAuthor)
-            .toList();
+                .filter(b -> b.getAuthor() != null && b.getAuthor().getName().toLowerCase().contains(lowerName))
+                .toList();
     }
 }
 
