@@ -36,6 +36,8 @@ type BookPage {
   pageInfo: PageInfo
 }
 
+union SearchResult = Book | Author | Category
+
 type Query {
     books(
     page: Int = 0,
@@ -47,4 +49,5 @@ type Query {
   ): BookPage
   
    booksByAuthor(nameOrId: String = ""): [Book]
+   search(keyword : String) : [SearchResult]
 }

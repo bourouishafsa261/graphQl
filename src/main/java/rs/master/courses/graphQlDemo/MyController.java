@@ -94,7 +94,46 @@ public class MyController {
                 .toList();
 
     }
+
+
+// Search using a keyword
+
+@QueryMapping
+public List<Object> search(
+    @Argument String keyword
+) {
+	String kw = keyword.toLowerCase();
+	List<Object> combinedResults = new ArrayList<>();
+	
+	// search in books
+	combinedResults.addAll(
+	        brp.findAll().stream()
+	            .filter(b -> b.getTitle() != null &&
+	                         b.getTitle().toLowerCase().contains(kw))
+	            .toList()
+	    );
+
+	    // search in authors
+	combinedResults.addAll(
+	        arp.findAll().stream()
+	            .filter(a -> a.getName() != null &&
+	                         a.getName().toLowerCase().contains(kw))
+	            .toList()
+	    );
+
+	    // search in categories
+	combinedResults.addAll(
+	        crp.findAll().stream()
+	            .filter(c -> c.getCategoryName() != null &&
+	                         c.getCategoryName().toLowerCase().contains(kw))
+	            .toList()
+	    );
+    
+    return combinedResults;
 }
+
+}
+
 
 
 
