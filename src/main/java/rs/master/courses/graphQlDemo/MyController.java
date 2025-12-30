@@ -32,31 +32,48 @@ public class MyController {
         boolean hasMore = itemsLeft > 0;
         return new PageInfo(total, itemsLeft, hasMore, page, size);
     }
+    private boolean isInCategory(Book b, int catId, boolean recursive) {
+        if (b.getCategory() == null) return false;
+        Category c = b.getCategory();
+        if (c.getIdCategory() == catId) return true;
+        if (!recursive) return false;
+
+        Category parent = c.getParentCategory();
+        while (parent != null) {
+            if (parent.getIdCategory() == catId) return true;
+            parent = parent.getParentCategory();
+        }
+        return false;
+    }
     
     // ---------- PART 1 ----------
 
-    // List books paginated 
+    // List books paginated + filters + recursive category
     @QueryMapping
     public BookPage books(
-            @Argument Integer page,
-            @Argument Integer size
+        @Argument Integer page,
+        @Argument Integer size,
+        @Argument Integer publicationYear,
+        @Argument String language,
+        @Argument Integer idCategory,
+        @Argument Boolean recursive
     ) {
-    	// default page size
         int p = page != null ? page : 0;
         int s = (size != null && size > 0) ? size : 10;
+        boolean rec = recursive != null && recursive;
 
-        List<Book> allBooks = brp.findAll();
-        int total = allBooks.size();
+        List<Book> filtered = brp.findAll().stream()
+            .filter(b -> publicationYear == null || b.getPublicationYear() == publicationYear)
+            .filter(b -> language == null || b.getLanguage().equalsIgnoreCase(language))
+            .filter(b -> idCategory == null || isInCategory(b, idCategory, rec))
+            .toList();
 
-        List<Book> pageList = allBooks.stream()
-                .skip((long) p * s)
-                .limit(s)
-                .toList();
+        int total = filtered.size();
+        List<Book> pageList = filtered.stream()
+            .skip(p * s).limit(s)
+            .toList();
 
-        return new BookPage(
-                pageList,
-                makePageInfo(p, s, total)
-        );
+        return new BookPage(pageList, makePageInfo(p, s, total));
     }
 }
 

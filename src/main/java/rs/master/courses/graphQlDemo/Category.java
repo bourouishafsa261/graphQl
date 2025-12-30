@@ -24,3 +24,4 @@ public class Category {
 	@OneToMany(mappedBy = "category")
 	private List<Book> books;
 }
+

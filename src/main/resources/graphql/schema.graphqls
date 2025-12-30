@@ -37,8 +37,12 @@ type BookPage {
 }
 
 type Query {
-  books(
+    books(
     page: Int = 0,
-    size: Int = 10
+    size: Int = 10,
+    publicationYear: Int,
+    language: String,
+    idCategory: ID,
+    recursive: Boolean = false
   ): BookPage
 }
