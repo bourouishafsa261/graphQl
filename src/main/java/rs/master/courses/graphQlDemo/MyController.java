@@ -90,8 +90,9 @@ public class MyController {
         // Otherwise, treat as name 
         String lowerName = nameOrId.toLowerCase();
         return brp.findAll().stream()
-                .filter(b -> b.getAuthor() != null && b.getAuthor().getName().toLowerCase().contains(lowerName))
+                .filter(b -> b.getAuthor() != null && b.getAuthor().getName().toLowerCase().equals(lowerName))
                 .toList();
+
     }
 }
 
