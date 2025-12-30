@@ -38,6 +38,13 @@ type BookPage {
 
 union SearchResult = Book | Author | Category
 
+type SearchPage {
+  list: [SearchResult]
+  pageInfo: PageInfo
+}
+
+enum SearchType { BOOK AUTHOR CATEGORY ALL }
+
 type Query {
     books(
     page: Int = 0,
@@ -49,5 +56,11 @@ type Query {
   ): BookPage
   
    booksByAuthor(nameOrId: String = ""): [Book]
-   search(keyword : String) : [SearchResult]
+   
+    search(
+    keyword: String!,
+    type: SearchType = ALL,
+    page: Int = 0,
+    size: Int = 10
+  ): SearchPage
 }
