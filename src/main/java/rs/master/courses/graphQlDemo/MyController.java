@@ -3,6 +3,7 @@ package rs.master.courses.graphQlDemo;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -118,6 +119,17 @@ public class MyController {
 		List<Object> pageList = combinedResults.stream().skip(p * s).limit(s).toList();
 
 		return new SearchPage(pageList, makePageInfo(p, s, total));
+	}
+
+	// ---------- PART 2 (admin only) ----------
+	@PreAuthorize("hasRole('ADMIN')")
+	@MutationMapping
+	public Book addBook(@Argument BookInput book) {
+		Author a = arp.findById(book.getIdAuthor()).orElseThrow();
+		Category c = crp.findById(book.getIdCategory()).orElseThrow();
+
+		return brp.save(Book.builder().title(book.getTitle()).publicationYear(book.getPublicationYear())
+				.language(book.getLanguage()).bPages(book.getBPages()).author(a).category(c).build());
 	}
 
 }

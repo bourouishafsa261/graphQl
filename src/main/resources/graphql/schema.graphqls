@@ -42,6 +42,14 @@ type SearchPage {
   list: [SearchResult]
   pageInfo: PageInfo
 }
+input BookInput {
+  title: String!
+  publicationYear: Int
+  language: String
+  bPages: Int
+  idCategory: ID!
+  idAuthor: ID!
+}
 
 enum SearchType { BOOK AUTHOR CATEGORY ALL }
 
@@ -63,4 +71,8 @@ type Query {
     page: Int = 0,
     size: Int = 10
   ): SearchPage
+}
+type Mutation {
+  addBook(book: BookInput!): Book
+  
 }
