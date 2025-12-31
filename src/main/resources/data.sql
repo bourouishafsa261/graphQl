@@ -1,4 +1,4 @@
--- 20 categories first
+-- 20 categories
 INSERT INTO category (id_category, category_name, parent_category_id_category)
 SELECT
     gs,
@@ -9,8 +9,7 @@ SELECT
     END
 FROM generate_series(1, 20) AS gs;
 
-
--- 70 authors second
+-- 70 authors
 INSERT INTO author (id_author, name, age, nationality)
 SELECT
     gs,
@@ -25,8 +24,7 @@ SELECT
     END
 FROM generate_series(1, 70) AS gs;
 
-
--- 170 books last
+-- 170 books
 INSERT INTO book (id_book, title, publication_year, language, b_pages, category_id_category, author_id_author)
 SELECT
     gs,
@@ -41,4 +39,3 @@ SELECT
     FLOOR(RANDOM() * 20) + 1,
     FLOOR(RANDOM() * 70) + 1
 FROM generate_series(1, 170) AS gs;
-
