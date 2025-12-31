@@ -122,6 +122,7 @@ public class MyController {
 	}
 
 	// ---------- PART 2 (admin only) ----------
+
 	@PreAuthorize("hasRole('ADMIN')")
 	@MutationMapping
 	public Book addBook(@Argument BookInput book) {
@@ -130,6 +131,15 @@ public class MyController {
 
 		return brp.save(Book.builder().title(book.getTitle()).publicationYear(book.getPublicationYear())
 				.language(book.getLanguage()).bPages(book.getBPages()).author(a).category(c).build());
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@MutationMapping
+	public boolean deleteAuthor(@Argument int idA) {
+		if (!arp.existsById(idA))
+			return false;
+		arp.deleteById(idA);
+		return true;
 	}
 
 }
