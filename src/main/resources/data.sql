@@ -1,41 +1,38 @@
--- 20 categories
-INSERT INTO category (id_category, category_name, parent_category_id_category)
+-- 20 categories first
+INSERT INTO CATEGORY (CATEGORY_NAME, PARENT_CATEGORY_ID_CATEGORY)
 SELECT
-    gs,
-    'Category ' || gs,
-    CASE
-        WHEN gs <= 5 THEN NULL
-        ELSE FLOOR(RANDOM() * 5) + 1
-    END
-FROM generate_series(1, 20) AS gs;
+  CONCAT('Category ', X),
+  CASE 
+    WHEN X <= 5 THEN NULL
+    ELSE CAST(RAND()*5 + 1 AS INT)
+  END
+FROM SYSTEM_RANGE(1,20);
 
--- 70 authors
-INSERT INTO author (id_author, name, age, nationality)
+-- 70 authors second
+INSERT INTO AUTHOR (NAME, AGE, NATIONALITY)
 SELECT
-    gs,
-    'Author ' || gs,
-    25 + (gs % 50),
-    CASE
-        WHEN gs % 5 = 0 THEN 'Algerian'
-        WHEN gs % 5 = 1 THEN 'French'
-        WHEN gs % 5 = 2 THEN 'English'
-        WHEN gs % 5 = 3 THEN 'Moroccan'
-        ELSE 'Tunisian'
-    END
-FROM generate_series(1, 70) AS gs;
+  CONCAT('Author ', X),
+  CAST(25 + RAND()*50 AS INT),
+  CASE 
+    WHEN MOD(X,5)=0 THEN 'Algerian'
+    WHEN MOD(X,5)=1 THEN 'French'
+    WHEN MOD(X,5)=2 THEN 'English'
+    WHEN MOD(X,5)=3 THEN 'Moroccan'
+    ELSE 'Tunisian'
+  END
+FROM SYSTEM_RANGE(1,70);
 
--- 170 books
-INSERT INTO book (id_book, title, publication_year, language, b_pages, category_id_category, author_id_author)
+-- 170 books last
+INSERT INTO BOOK (TITLE, PUBLICATION_YEAR, LANGUAGE, B_PAGES, CATEGORY_ID_CATEGORY, AUTHOR_ID_AUTHOR)
 SELECT
-    gs,
-    'Book ' || gs,
-    1990 + (gs % 35),
-    CASE
-        WHEN gs % 3 = 0 THEN 'English'
-        WHEN gs % 3 = 1 THEN 'French'
-        ELSE 'Arabic'
-    END,
-    100 + (gs % 400),
-    FLOOR(RANDOM() * 20) + 1,
-    FLOOR(RANDOM() * 70) + 1
-FROM generate_series(1, 170) AS gs;
+  CONCAT('Book ', X),
+  1990 + MOD(X, 35),
+  CASE 
+    WHEN MOD(X,3)=0 THEN 'English'
+    WHEN MOD(X,3)=1 THEN 'French'
+    ELSE 'Arabic'
+  END,
+  100 + MOD(X, 400),
+  (SELECT ID_CATEGORY FROM CATEGORY ORDER BY RAND() LIMIT 1),
+  (SELECT ID_AUTHOR FROM AUTHOR ORDER BY RAND() LIMIT 1)
+FROM SYSTEM_RANGE(1,170);
