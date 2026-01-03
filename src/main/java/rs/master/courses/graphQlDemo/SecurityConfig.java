@@ -19,6 +19,7 @@ public class SecurityConfig {
 
 		http.authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").permitAll().anyRequest().permitAll())
 				.httpBasic(Customizer.withDefaults());
+		
 
 		return http.build();
 	}

@@ -1,10 +1,17 @@
 package rs.master.courses.graphQlDemo;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+
+import org.springframework.graphql.execution.ErrorType;
+import graphql.GraphQLError;
+import graphql.GraphQLException;
+import graphql.GraphqlErrorBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,11 +133,29 @@ public class MyController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@MutationMapping
 	public Book addBook(@Argument BookInput book) {
-		Author a = arp.findById(book.getIdAuthor()).orElseThrow();
-		Category c = crp.findById(book.getIdCategory()).orElseThrow();
-
-		return brp.save(Book.builder().title(book.getTitle()).publicationYear(book.getPublicationYear())
-				.language(book.getLanguage()).bPages(book.getBPages()).author(a).category(c).build());
+	    Author a = arp.findById(book.getIdAuthor())
+	            .orElseThrow(() -> new GraphQLException("Author not found"));
+	    Category c = crp.findById(book.getIdCategory())
+	            .orElseThrow(() -> new GraphQLException("Category not found"));
+	    
+	    // Check for duplicate manually
+	    boolean exists = brp.findAll().stream()
+	            .anyMatch(b -> b.getTitle().equalsIgnoreCase(book.getTitle()) 
+	                        && b.getAuthor() != null 
+	                        && b.getAuthor().getIdAuthor() == a.getIdAuthor());
+	    
+	    if (exists) {
+	        throw new GraphQLException("A book with this title by this author already exists");
+	    }
+	    
+	    return brp.save(Book.builder()
+	            .title(book.getTitle())
+	            .publicationYear(book.getPublicationYear())
+	            .language(book.getLanguage())
+	            .bPages(book.getBPages())
+	            .author(a)
+	            .category(c)
+	            .build());
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -142,4 +167,11 @@ public class MyController {
 		return true;
 	}
 
+	@GraphQlExceptionHandler
+	public GraphQLError handleGraphQLException(GraphQLException ex) {
+	    return GraphqlErrorBuilder.newError()
+	            .errorType(ErrorType.BAD_REQUEST)
+	            .message(ex.getMessage())
+	            .build();
+	}
 }

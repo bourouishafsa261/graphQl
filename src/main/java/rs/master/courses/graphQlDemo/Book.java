@@ -8,21 +8,26 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"title", "author_id_author"})
+    }
+)
 public class Book {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idBook;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idBook;
 
-	private String title;
-	private int publicationYear;
-	private String language;
-	private int bPages;
+    private String title;
+    private int publicationYear;
+    private String language;
+    private int bPages;
 
-	@ManyToOne
-	private Category category;
+    @ManyToOne
+    private Category category;
 
-	@ManyToOne
-	private Author author;
-
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "author_id_author", nullable = false)
+    private Author author;
 }
