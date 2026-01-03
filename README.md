@@ -1,7 +1,32 @@
-GraphQL API for a **Books Library** with Authors and Categories.  
-This README documents all functionalities of the API with example queries and screenshots.
+# GraphQL API for a Books Library
+
+This GraphQL API manages a **Books Library** with Authors and Categories.  
+This README documents all functionalities of the API with example queries, mutations, and screenshots.
 
 ---
+
+## Table of Contents
+1. [Deployment](#deployment)
+2. [List Books](#1-list-books-paginated--filters--recursive)
+3. [Books by Author](#2-books-by-author-id-or-name)
+4. [Search by Keyword](#3-search-by-keyword)
+5. [Add a Book (Admin)](#4-add-a-book-admin)
+6. [Delete an Author (Admin)](#5-delete-an-author-admin)
+
+---
+
+## Deployment
+
+The GraphQL API has been deployed and is publicly accessible on **Railway**.
+
+[![Railway Logo](https://camo.githubusercontent.com/4976251d89450afd636b68329bdfa574e8ab8801835452f7d639bba48e46a5e6/68747470733a2f2f7261696c7761792e6170702f627574746f6e2e737667)](https://graphql-production-3cb2.up.railway.app/playground?path=/graphql)
+
+You can test all queries and mutations directly in the GraphiQL Playground at the above link.  
+> **Note:** Admin-only mutations (`addBook`, `deleteAuthor`) require authentication.
+
+
+---
+
 
 ##  1. List Books (Paginated + Filters + Recursive)
 
@@ -9,6 +34,7 @@ This README documents all functionalities of the API with example queries and sc
 Fetch books with optional pagination, filters, and recursive category search. Default page size is 10.  
 
 ### a) Default list of books
+
 <img width="1340" height="696" alt="Screenshot 2026-01-03 at 5 08 34 PM" src="https://github.com/user-attachments/assets/61c67a45-d99b-492a-a5bf-06c3ee113830" />
 <img width="1340" height="696" alt="Screenshot 2026-01-03 at 5 08 43 PM" src="https://github.com/user-attachments/assets/2a2671c2-1a31-4e26-834a-d43b0e804e1a" />
 
