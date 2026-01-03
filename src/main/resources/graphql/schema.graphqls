@@ -1,5 +1,5 @@
 type Author {
-  idA: ID!
+  idAuthor: ID!
   name: String
   age: Int
   nationality: String
